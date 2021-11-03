@@ -145,7 +145,9 @@ def main(args):
         frames = dataset.frames
         has_keypoints = True if joints2d is not None else False
 
-        dataloader = DataLoader(dataset, batch_size=args.vibe_batch_size, num_workers=16)
+        # change from num_workers=16, which has error:
+        #   RuntimeError: DataLoader worker (pid(s) 505) exited unexpectedly
+        dataloader = DataLoader(dataset, batch_size=args.vibe_batch_size, num_workers=0)
 
         with torch.no_grad():
 
