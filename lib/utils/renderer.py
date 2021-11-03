@@ -16,6 +16,8 @@
 
 import math
 import trimesh
+import os
+os.environ['PYOPENGL_PLATFORM'] = 'osmesa'
 import pyrender
 import numpy as np
 from pyrender.constants import RenderFlags
@@ -117,7 +119,8 @@ class Renderer:
 
         rgb, _ = self.renderer.render(self.scene, flags=render_flags)
         valid_mask = (rgb[:, :, -1] > 0)[:, :, np.newaxis]
-        output_img = rgb[:, :, :-1] * valid_mask + (1 - valid_mask) * img
+        # output_img = rgb[:, :, :-1] * valid_mask + (1 - valid_mask) * img[:, :, :-1]
+        output_img = rgb * valid_mask + (1 - valid_mask) * img
         image = output_img.astype(np.uint8)
 
         self.scene.remove_node(mesh_node)
